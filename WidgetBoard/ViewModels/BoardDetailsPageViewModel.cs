@@ -1,7 +1,9 @@
-﻿using WidgetBoard.Models;
+﻿using WidgetBoard.Helpers;
+using WidgetBoard.Models;
 
 namespace WidgetBoard.ViewModels;
 
+[QueryProperty(nameof(BoardCreatedCompletionSource), "Created")]
 public partial class BoardDetailsPageViewModel : BaseViewModel
 {
 	private string boardName = string.Empty;
@@ -41,13 +43,20 @@ public partial class BoardDetailsPageViewModel : BaseViewModel
 	}
 
 	public Command SaveCommand { get; }
+	public Command CancelCommand { get; }
+	public TaskCompletionSource<Board?>? BoardCreatedCompletionSource { get; set; }
 
     public BoardDetailsPageViewModel()
     {
-		SaveCommand = new(Save, () => !string.IsNullOrWhiteSpace(BoardName));
+		SaveCommand = new(async () => await Save(), () => !string.IsNullOrWhiteSpace(BoardName));
+		CancelCommand = new(async () =>
+		{
+			await Shell.Current.GoToAsync("..");
+			BoardCreatedCompletionSource?.SetResult(default);
+        });
     }
 
-    private void Save()
+    private async Task Save()
 	{
 		Board board = new()
 		{
@@ -55,5 +64,7 @@ public partial class BoardDetailsPageViewModel : BaseViewModel
 			NumberOfColumns = NumberOfColumns,
 			NumberOfRows = NumberOfRows
 		};
-	}
+        await Shell.Current.GoToAsync("..");
+		BoardCreatedCompletionSource?.SetResult(board);
+    }
 }

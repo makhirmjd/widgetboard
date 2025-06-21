@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Runtime.Versioning;
+using WidgetBoard.Helpers;
+using WidgetBoard.Helpers.Extentions;
 using WidgetBoard.Pages;
 using WidgetBoard.ViewModels;
 
@@ -18,7 +21,7 @@ namespace WidgetBoard
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             ConfigureServices(builder.Services);
@@ -28,8 +31,11 @@ namespace WidgetBoard
 
         private static void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<BoardDetailsPage>();
-            services.AddTransient<BoardDetailsPageViewModel>();
+            services.AddPage<BoardDetailsPage, BoardDetailsPageViewModel>(RouteNames.BoardDetails);
+            services.AddPage<BoardListPage, BoardListPageViewModel>(RouteNames.BoardList);
+            services.AddPage<FixedBoardPage, FixedBoardPageViewModel>(RouteNames.FixedBoard);
+            services.AddPage<SettingsPage, SettingsPageViewModel>(RouteNames.Settings);
+            services.AddPage<AppShell, AppShellViewModel>("default");
         }
     }
 }
