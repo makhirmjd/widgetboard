@@ -5,11 +5,40 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:WidgetBoard"
     xmlns:pages="clr-namespace:WidgetBoard.Pages"
-    Title="WidgetBoard">
+    xmlns:viewModels="clr-namespace:WidgetBoard.ViewModels"
+    xmlns:models="clr-namespace:WidgetBoard.Models"
+    x:DataType="viewModels:AppShellViewModel"
+    FlyoutBehavior="Flyout">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate pages:BoardDetailsPage}"
-        Route="BoardDetailsPage" />
+    <TabBar>
+        <Tab Title="Boards">
+            <ShellContent ContentTemplate="{DataTemplate pages:BoardListPage}" />
+        </Tab>
+        <Tab Title="Settings">
+            <ShellContent ContentTemplate="{DataTemplate pages:SettingsPage}" />
+        </Tab>
+    </TabBar>
 
+    <Shell.FlyoutHeader>
+        <Label 
+            Text="My boards"
+            FontSize="20"
+            HorizontalTextAlignment="Center" />
+    </Shell.FlyoutHeader>
+
+    <Shell.FlyoutContent>
+        <CollectionView
+            ItemsSource="{Binding Boards}"
+            SelectionMode="Single"
+            SelectedItem="{Binding CurrentBoard}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Board">
+                    <Label 
+                        Text="{Binding Name}" 
+                        FontSize="20" 
+                        Padding="10,0,0,0" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Shell.FlyoutContent>
 </Shell>

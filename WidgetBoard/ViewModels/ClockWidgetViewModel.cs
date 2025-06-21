@@ -1,6 +1,6 @@
 ﻿namespace WidgetBoard.ViewModels;
 
-public class ClockWidgetViewModel : BaseViewModel, IWidgetViewModel
+public partial class ClockWidgetViewModel : BaseViewModel, IWidgetViewModel
 {
     private readonly Scheduler scheduler = new();
     private DateOnly date;
