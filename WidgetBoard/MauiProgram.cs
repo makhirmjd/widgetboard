@@ -4,6 +4,7 @@ using WidgetBoard.Helpers;
 using WidgetBoard.Helpers.Extentions;
 using WidgetBoard.Pages;
 using WidgetBoard.ViewModels;
+using WidgetBoard.Views;
 
 namespace WidgetBoard
 {
@@ -36,6 +37,12 @@ namespace WidgetBoard
             services.AddPage<FixedBoardPage, FixedBoardPageViewModel>(RouteNames.FixedBoard);
             services.AddPage<SettingsPage, SettingsPageViewModel>(RouteNames.Settings);
             services.AddPage<AppShell, AppShellViewModel>("default");
+
+            services.AddSingleton<WidgetFactory>();
+            WidgetFactory.ReisterWidget<ClockWidgetView, ClockWidgetViewModel>("Clock");
+            services.AddTransient<ClockWidgetView>();
+            services.AddTransient<ClockWidgetViewModel>();
+            services.AddSingleton<WidgetTemplateSelector>();
         }
     }
 }
